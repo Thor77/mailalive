@@ -1,0 +1,8 @@
+<%- | Hash $vars | -%>
+#!/bin/sh
+curl -s --user "api:<%= $vars['mailalive_mailgun_apikey'] %>" \
+    "https://api.eu.mailgun.net/v3/<%= $vars['mailalive_mailgun_domain'] %>/messages" \
+    -F from="Mailgun <mailgun@<%= $vars['mailalive_mailgun_domain'] %>>" \
+    -F to="<%= $vars['mailalive_mailgun_to'] %>" \
+    -F subject="Alive check $(date +%s)" \
+    -F text='This message is used for checking the aliveness of this mail server.'
