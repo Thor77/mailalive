@@ -27,7 +27,8 @@ def main(host, port, username, password, warning, critical):
 
     # fetch num of latest message
     _, msgnums = conn.sort('REVERSE ARRIVAL', 'UTF-8', 'ALL')
-    single_msgnum = msgnums[0].decode().split(' ')[0].encode()
+    extracted_msgnums = msgnums[0].decode().split(' ')
+    single_msgnum = extracted_msgnums[0].encode()
     if not single_msgnum:
         return 2, 'alive message missing'
 
@@ -47,7 +48,7 @@ def main(host, port, username, password, warning, critical):
     age_msg = 'alive message age {:.1f}s'.format(age)
 
     # remove all other messages
-    for num in msgnums[1:]:
+    for num in extracted_msgnums[1:]:
         conn.store(num, '+FLAGS', '\\Deleted')
     conn.expunge()
 
